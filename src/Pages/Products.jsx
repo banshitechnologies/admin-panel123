@@ -131,7 +131,7 @@ function Products() {
             axios.get('api/packages/getallpackages')
                 .then(function (response) {
                     // handle success
-                    console.log(response);
+                  
                     dispatch({
                         type: "getProducts",
                         payload: response.data
