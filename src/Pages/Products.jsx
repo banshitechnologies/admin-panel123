@@ -47,8 +47,8 @@ function Products() {
             });
     }
 
-    const getDataForOrder = async (data, packageame, offers, amount, packageType) => {
-        console.log(packageame, offers, amount, packageType);
+    const getDataForOrder = async (data, packageame1, offers, amount, packageType) => {
+        console.log(packageame1, offers, amount, packageType);
         setisOrder(true);
         dispatch({
             type: "getoffers",
@@ -59,7 +59,7 @@ function Products() {
             payload: data.name
         })
         const { data: { key } } = await axios.get('api/getkey')
-        const { data: { order } } = await axios.post('https://banshiback.herokuapp.com/api/payment/checkout', {
+        const { data: { order } } = await axios.post('api/payment/checkout', {
             amount
         })
         console.log(order);
@@ -93,7 +93,7 @@ function Products() {
             console.log(logindata.details.name);
             const formdata = new FormData();
             formdata.append('userid', logindata.details._id);
-            formdata.append('selectedPackage', packageame);
+            formdata.append('selectedPackage', packageame1);
             formdata.append('packageType', packageType);
             formdata.append('needs', offers);
             formdata.append('price', amount);
@@ -125,7 +125,7 @@ function Products() {
     }
 
 
-
+console.log(logindata);
     useEffect(() => {
         const getAllPackage = () => {
             axios.get('api/packages/getallpackages')
