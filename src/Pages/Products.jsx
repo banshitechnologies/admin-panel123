@@ -59,7 +59,7 @@ function Products() {
             payload: data.name
         })
         const { data: { key } } = await axios.get('api/getkey')
-        const { data: { order } } = await axios.post('http://18.183.47.22/api/payment/checkout', {
+        const { data: { order } } = await axios.post('https://banshiback.herokuapp.com/api/payment/checkout', {
             amount
         })
         console.log(order);
@@ -72,7 +72,7 @@ function Products() {
             description: "Test Transaction",
             image: "https://example.com/your_logo",
             order_id: order.id,
-            callback_url: "http://localhost:8800/api/payment/paymentvarification",
+            callback_url: "https://banshiback.herokuapp.com/api/payment/paymentvarification",
             prefill: {
                 name: logindata.details.name,
                 email: logindata.details.email,
@@ -204,7 +204,7 @@ function Products() {
                             <div className="pricing-body">
                                 <ul className="pricing-table-ul">
                                     <li><i><MdSend /></i>{allPackage.packagebody[1].offers}</li>
-                                </ul><a className="view-more" onClick={() => getDataForOrder(allPackage.packagebody[1])}>Buy Now</a></div>
+                                </ul><a className="view-more" onClick={() => getDataForOrder(allPackage.packagebody[1], packageame, offers, allPackage.packagebody[1].price, allPackage.packagebody[1].name)}>Buy Now</a></div>
                         </div>
                     </div> : ""
                         : ""}
