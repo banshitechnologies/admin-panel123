@@ -74,9 +74,9 @@ function Products() {
             order_id: order.id,
             callback_url: "https://banshiback.herokuapp.com/api/payment/paymentvarification",
             prefill: {
-                name: logindata.details.name,
+                name: logindata.details.username,
                 email: logindata.details.email,
-                contact: logindata.details.phoneNumber
+                contact: logindata.details.phonenumber
             },
             notes: {
                 "address": "Razorpay Corporate Office"
