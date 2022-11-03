@@ -187,14 +187,14 @@ console.log(logindata);
 
                                     <li><i><MdSend /></i>{allPackage.packagebody[0].offers}</li>
 
-                                </ul><a className="view-more" onClick={() => getDataForOrder(allPackage.packagebody[0])}>Buy Now</a></div>
+                                </ul><a className="view-more" onClick={() => getDataForOrder(allPackage.packagebody[0], packageame, offers, allPackage.packagebody[0].price, allPackage.packagebody[0].name)}>Buy Now</a></div>
                         </div>
                     </div> : "Nothing to show"
                         : ""}
                         
 
                 {
-                    allPackage.length != 0 ? allPackage.packagebody.length >= 2 ? <div className="col-md-4 col-sm-6">
+                    allPackage.length !== 0 ? allPackage.packagebody.length >= 2 ? <div className="col-md-4 col-sm-6">
                         <div className="pricing-table-3 premium">
                             <div className="pricing-table-header">
                                 <h4><strong>{allPackage.packagebody[1].name}</strong></h4>
