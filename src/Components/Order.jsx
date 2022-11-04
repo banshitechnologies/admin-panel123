@@ -107,23 +107,7 @@ function Order() {
     });
 
     const handlePayment = async (packageame, amount,packageType,_id) => {
-    //    await axios.post('http://localhost:8800/api/payment/paymentvarification',{
-    //         amount,
-    //         packageame,
-    //         packageType,
-    //         _id
-    //     })
-    //         .then(function (response) {
-    //             // handle success
-    //             console.log(response);
-    //         })
-    //         .catch(function (error) {
-    //             // handle error
-    //             console.log(error);
-    //         })
-    //         .finally(function () {
-    //             // always executed
-    //         });
+  
         const { data: { key } } = await axios.get('api/getkey')
         const { data: { order } } = await axios.post('api/payment/checkout', {
             amount
@@ -201,7 +185,7 @@ function Order() {
                                 {
                                     offers.length !== 0 ? offers.map((offer) => (
                                         <div class="form-check">
-                                            <input class="form-check-input" onClick={handleInput} type="checkbox" name='needs' value={offer}
+                                            <input className="form-check-input" onClick={handleInput} type="checkbox" name='needs' value={offer}
                                                 id={offer} />
                                             <label class="form-check-label" for={offer}>
                                                 {offer}

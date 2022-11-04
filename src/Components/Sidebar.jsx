@@ -2,7 +2,7 @@ import React from 'react'
 import Logo from '../assets/logo_white.png';
 import '../css/sidebar.css';
 import {MdHome,MdAssignment} from 'react-icons/md';
-import {FcServices} from 'react-icons/fc';
+
 import {FaProductHunt} from 'react-icons/fa';
 import {GrTransaction} from 'react-icons/gr';
 import {BiSupport} from 'react-icons/bi';

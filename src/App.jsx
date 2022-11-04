@@ -9,46 +9,38 @@ import MyServices from './Pages/MyServices';
 import Orders from './Pages/Orders';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
 import 'animate.css';
 import PaymentSuccess from './Pages/PaymentSuccess';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Forgotpass from './Pages/Forgotpass';
-
 function App() {
-
   const location = useLocation();
   const dispatch = useDispatch();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const cookies = new Cookies();
   const [token, settoken] = useState();
 
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getLocation = async()=>{
      await axios.get('https://api.bigdatacloud.net/data/reverse-geocode-client').then((res)=>{
-      console.log('====================================');
-      console.log(res);
       dispatch({
         type:"CountryName",
         payload:res.data.countryCode
       })
-      console.log('====================================');
-    }).catch((err)=>{
       
-      console.log(err);
+    }).catch((err)=>{
       throw err
     })
 
   }
-
-  
-
   useEffect(() => {
     const cookie = cookies.get('user');
+   
     settoken(cookie);
-    console.log(token);
     getLocation();
   }, [cookies, cookies.user, getLocation, location.pathname, token]);
   return (
@@ -58,8 +50,6 @@ function App() {
         <div className={location.pathname === "/login" || location.pathname === "/register" ? "d-none" : "col-md-3"}>
           <Sidebar />
         </div>
-
-
 
         <div className={location.pathname === "/login" || location.pathname === "/register" ? "col-md-12" : "col-md-9"}>
           <div className="main">

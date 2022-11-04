@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Logo from "../assets/logo_white.png";
 import '../css/login.css';
 import { Link,useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 function Login() {
-    const [cookies, setCookie] = useCookies(['userDetails']);
     const history = useNavigate();
     const dispatch = useDispatch();
     const { logindata } = useSelector((state) => state.auth);
@@ -16,46 +14,71 @@ function Login() {
         userName: "",
         password: "",
     })
+    // const [userData,setUserData] = useState();
     const [loginError, setLoginError] = useState("");
-    const [showToast, setShowToast] = useState(false);
-
+    const [buttonAvailable,setButtonAvailable] = useState(true);
     const handleInput = (e) => {
         e.preventDefault();
         const name = e.target.name;
         const value = e.target.value;
         setLogin({ ...login, [name]: value });
+
+        if (login.password === "" || login.userName === "") {
+            setButtonAvailable(true);
+        }else{
+            setButtonAvailable(false);
+        }
     }
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        await axios.post('api/auth/login', {
-            username: login.userName,
-            password: login.password
-        })
-            .then(function (response) {
-
-                dispatch({
-                    type: "login",
-                    payload: response.data
-                });
-                setLoginError("login Successfull");
-                history("/");
-            })
-            .catch(function (error) {
-
-                dispatch({
-                    type: "login",
-                    payload: null
+      console.log("ok");
+        if (login.userName !== "" && login.password !== "") {
+            
+            await axios.post('api/auth/login', {
+                username: login.userName,
+                password: login.password
+            }).then(function (response) {
+                
+                    setLoginError("login Successfull");
+                    const myTimeout = setTimeout(myGreeting, 3000);
+                    localStorage.setItem('userdata',JSON.stringify(response.data));
+                    const userdata = JSON.parse(localStorage.getItem('userdata'));
+                    console.log(userdata);
+                    dispatch({
+                        type: "login",
+                        payload: userdata
+                    });
+                    function myGreeting() {
+                        history("/");
+                    }
                 })
-                setLoginError("input invalid");
-            });
+                .catch(function (error) {
+                    dispatch({
+                        type: "login",
+                        payload: null
+                    })
+                    console.log(error);
+                    setLoginError("input invalid");
+                    const myTimeout = setTimeout(myGreeting, 3000);
 
-        setShowToast(true);
-
+                    function myGreeting() {
+                        setLoginError("");
+                    }
+                });
+        }else{
+            setLoginError("input field can't empty");
+        }
     }
 
     useEffect(() => {
-    }, [loginError, showToast,cookies])
+        
+       if (login.password === "" || login.userName === "") {
+        setButtonAvailable(true);
+    }else{
+        setButtonAvailable(false);
+    }
+    },[buttonAvailable, login, loginError]);
     return (
         <div>
 
@@ -76,9 +99,7 @@ function Login() {
                             <div className="col-md-6 animate__animated animate__backInRight">
                                 <div className="order-2 order-lg-1">
                                     {
-                                        showToast ? <div class="alert alert-success" role="alert">
-                                            {loginError}
-                                        </div> : ""
+                                        loginError !== "" ? <div className="tooltip">{loginError}</div> : ""
                                     }
                                     <p className="text-center h4 fw-bold mb-3 mx-1 mx-md-4 clr mt-4">Login</p>
                                     <form style={{ maxWidth: "500px", margin: 'auto' }} className='justify-center'>
@@ -93,7 +114,7 @@ function Login() {
                                         </div>
 
                                         <div className="regbutton flex justify-center">
-                                            <button type="submit" class="btnr mt-4" onClick={handleLogin}>Login</button>
+                                            <button type="submit" class={buttonAvailable ? "btnr mt-4 disable":"btnr mt-4"} disabled={buttonAvailable} onClick={handleLogin}>Login</button>
                                         </div>
                                         <p style={{ textAlign: 'center', paddingLeft: '45px', marginTop: '20px' }}>Dont have an account ?  <Link to="/register">Register</Link></p>
                                         <p style={{ textAlign: 'center', paddingLeft: '45px', marginTop: '20px' }}> <Link to="/forgetpass">Forgot Password?</Link></p>
