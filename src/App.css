@@ -4,3 +4,15 @@
 .margin-left{
   margin-left: 20px;
 }
+.col-md-7.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.height_100vh{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

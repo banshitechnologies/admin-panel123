@@ -12,7 +12,7 @@
   .borderE{
     border-bottom-left-radius: 5px !important;
     border-top-left-radius: 5px;
-    height: 400px;
+    height: 504px;
   }
   .left_header p{
     line-height: 27px;
@@ -45,7 +45,7 @@
     padding: 15px 20px;
     border: none;
     cursor: pointer;
-    width: 86%;
+    width: 84%;
     opacity: 0.9;
     
   }

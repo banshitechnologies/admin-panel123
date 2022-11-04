@@ -125,7 +125,7 @@ function Products() {
     }
 
 
-console.log(logindata);
+    console.log(logindata);
     useEffect(() => {
         const getAllPackage = () => {
             axios.get('api/packages/getallpackages')

@@ -56,3 +56,19 @@ export const order = createReducer(orders,{
     state.packageType = action.payload;
    }
 })
+
+const countryDetails = {
+    countryName:"",
+    callingCode:""
+}
+
+export const countrydetails = createReducer(countryDetails,{
+    CountryName:(state,action) => {
+        state.countryName = action.payload;
+    },
+
+    CallingCode: (state,action)=>{
+        state.callingCode = action.payload;
+    }
+
+})

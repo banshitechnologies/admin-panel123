@@ -3,56 +3,83 @@ import './App.css';
 import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import Home from './Pages/Home';
-import { BrowserRouter, Routes, Route,Navigate} from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Products from './Pages/Products';
 import MyServices from './Pages/MyServices';
 import Orders from './Pages/Orders';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import { useDispatch, useSelector } from 'react-redux';
-import { CookiesProvider,useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
+import Cookies from 'universal-cookie';
 import 'animate.css';
 import PaymentSuccess from './Pages/PaymentSuccess';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Forgotpass from './Pages/Forgotpass';
 
 function App() {
+
+  const location = useLocation();
   const dispatch = useDispatch();
-  const [cookies, setCookie] = useCookies(['user']);
-  setCookie('user', cookies.user, { path: '/' })
-  useEffect(() => {
-    
-  console.log(cookies.user);
-  },[cookies.user])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const cookies = new Cookies();
+  const [token, settoken] = useState();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getLocation = async()=>{
+     await axios.get('https://api.bigdatacloud.net/data/reverse-geocode-client').then((res)=>{
+      console.log('====================================');
+      console.log(res);
+      dispatch({
+        type:"CountryName",
+        payload:res.data.countryCode
+      })
+      console.log('====================================');
+    }).catch((err)=>{
+      
+      console.log(err);
+      throw err
+    })
+
+  }
+
   
-console.log(cookies.user);
+
+  useEffect(() => {
+    const cookie = cookies.get('user');
+    settoken(cookie);
+    console.log(token);
+    getLocation();
+  }, [cookies, cookies.user, getLocation, location.pathname, token]);
   return (
     <div className="App">
-      <CookiesProvider>
-      <BrowserRouter>
+      <div className="row margins">
 
-<div className="row margins">
-  <div className= "col-md-3">
-    <Sidebar />
-  </div>
-  <div className="col-md-9">
-    <div className="main">
-      <Navbar />
-      <Routes>
-        <Route path='/login' element={ <Login/> }/>
-        <Route path='/register' element={ <Register/>}/>
-        <Route path='/products' element={ <Products /> } />
-        <Route path='/myservices' element={ <MyServices /> } />
-        <Route path='/orders' element={<Orders /> } />
-        <Route path='/paymentsuccess' element={<PaymentSuccess/>}/>
-        <Route path='/' element={ <Home />} />
-        
-      </Routes>
-    </div>
-  </div>
-</div>
+        <div className={location.pathname === "/login" || location.pathname === "/register" ? "d-none" : "col-md-3"}>
+          <Sidebar />
+        </div>
 
-</BrowserRouter>
-      </CookiesProvider>
+
+
+        <div className={location.pathname === "/login" || location.pathname === "/register" ? "col-md-12" : "col-md-9"}>
+          <div className="main">
+            <Navbar />
+            <Routes>
+              <Route path='/login' element={token === undefined ? <Login/>: <Navigate to='/'/> } />
+              <Route path='/register' element={token === undefined ? <Register />: <Navigate to='/'/>} />
+              <Route path='/products' element={token !== undefined ? <Products /> : <Navigate to='/login'/>} />
+              <Route path='/myservices' element={<MyServices />} />
+              <Route path='/orders' element={<Orders />} />
+              <Route path='/paymentsuccess' element={<PaymentSuccess />} />
+              <Route path='/' element={token !== undefined ? <Home /> : <Navigate to='/login'/>} />
+              <Route path='/forgetpass' element={Forgotpass}/>
+            </Routes>
+          </div>
+        </div>
+      </div>
+
+
+
     </div>
   );
 }

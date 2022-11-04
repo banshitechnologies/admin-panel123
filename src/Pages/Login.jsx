@@ -62,7 +62,7 @@ function Login() {
             <div className="container">
                 <div className="row flex justify-content-center align-items-center ">
                     <div className="col-md-7 center">
-                        <div className="row mt-4">
+                        <div className="row mt-4 h-100vh">
                             <div className="col-md-6 left_Side_main borderE">
                                 <div className="logor pt-3 flex justify-center" >
                                     <img src={Logo} className="pt-3 pb-3" alt="" />
@@ -96,6 +96,7 @@ function Login() {
                                             <button type="submit" class="btnr mt-4" onClick={handleLogin}>Login</button>
                                         </div>
                                         <p style={{ textAlign: 'center', paddingLeft: '45px', marginTop: '20px' }}>Dont have an account ?  <Link to="/register">Register</Link></p>
+                                        <p style={{ textAlign: 'center', paddingLeft: '45px', marginTop: '20px' }}> <Link to="/forgetpass">Forgot Password?</Link></p>
                                     </form>
 
                                 </div>

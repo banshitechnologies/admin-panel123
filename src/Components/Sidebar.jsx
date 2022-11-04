@@ -6,11 +6,13 @@ import {FcServices} from 'react-icons/fc';
 import {FaProductHunt} from 'react-icons/fa';
 import {GrTransaction} from 'react-icons/gr';
 import {BiSupport} from 'react-icons/bi';
-import {Link} from 'react-router-dom'
+import {Link,useLocation} from 'react-router-dom';
 function Sidebar() {
+  const location = useLocation();
   return (
     <div>
-      <div className="main_Content">
+      {location.pathname !== "/login" && location.pathname !== "/register"?
+        <div className="main_Content">
         <div className="logo">
             <img src={Logo} alt="" />
         </div>
@@ -24,7 +26,8 @@ function Sidebar() {
                 <li><BiSupport className='menuIcon'/><span><h5>Support</h5></span></li>
             </ul>
         </div>
-      </div>
+      </div> : ""
+      }
     </div>
   )
 }
