@@ -117,7 +117,7 @@ function Login() {
                                             <button type="submit" class={buttonAvailable ? "btnr mt-4 disable":"btnr mt-4"} disabled={buttonAvailable} onClick={handleLogin}>Login</button>
                                         </div>
                                         <p style={{ textAlign: 'center', paddingLeft: '45px', marginTop: '20px' }}>Dont have an account ?  <Link to="/register">Register</Link></p>
-                                        <p style={{ textAlign: 'center', paddingLeft: '45px', marginTop: '20px' }}> <Link to="/forgetpass">Forgot Password?</Link></p>
+                                        {/* <p style={{ textAlign: 'center', paddingLeft: '45px', marginTop: '20px' }}> <Link to="/forgetpass">Forgot Password?</Link></p> */}
                                     </form>
 
                                 </div>
