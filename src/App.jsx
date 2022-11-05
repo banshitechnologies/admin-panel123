@@ -39,9 +39,13 @@ function App() {
   }
   useEffect(() => {
     const cookie = cookies.get('user');
-   
     settoken(cookie);
     getLocation();
+    const userdata = JSON.parse(localStorage.getItem('userdata'));
+    dispatch({
+      type:'login',
+      payload:userdata
+    })
   }, [cookies, cookies.user, getLocation, location.pathname, token]);
   return (
     <div className="App">

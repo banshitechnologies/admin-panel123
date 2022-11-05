@@ -3,10 +3,12 @@ import React, { useRef, useEffect, useState } from 'react'
 import { MdSend } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHorizontalScroll } from '../Components/SideScroll';
-
+import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png'
 import '../css/products.css'
 function Products() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { logindata } = useSelector((state) => state.auth);
     const { packageame, offers, price, packageType } = useSelector((state) => state.order);
     const { allProducts, allPackage } = useSelector((state) => state.products);
@@ -14,6 +16,7 @@ function Products() {
     const scrollRef = useHorizontalScroll();
     const [allOffers, setAlloffers] = useState();
     const [isOrder, setisOrder] = useState(false);
+    const [paymentids, setPaymentids] = useState();
     const [details, setDetails] = useState({
         needs: [],
         isExistownLogo: false,
@@ -26,16 +29,19 @@ function Products() {
         referance: false,
         referanceImages: [],
         websiteLink: "",
+        razorpay_payment_id: "",
+        razorpay_order_id: "",
+        razorpay_signature: ""
 
     });
 
 
     const handlePtype = async (title) => {
-       
+
 
         axios.post(`api/packages/getallpackagebytitle`, { packagetitle: title })
             .then(function (response) {
-             
+
                 dispatch({
                     type: "getPackages",
                     payload: response.data
@@ -68,11 +74,49 @@ function Products() {
             key: key,
             amount: order.amount,
             currency: "INR",
-            name: "Washim",
+            name: "Banshi Technology",
             description: "Test Transaction",
-            image: "https://example.com/your_logo",
+            image: logo,
             order_id: order.id,
-            callback_url: "https://banshiback.herokuapp.com/api/payment/paymentvarification",
+            handler: async(response) => {
+                setPaymentids(response);
+               
+                try {
+                    const formdata = new FormData();
+                    formdata.append('userid', logindata.details._id);
+                    formdata.append('selectedpackage', packageame1);
+                    formdata.append('packageType', packageType);
+                    formdata.append('needs', offers);
+                    formdata.append('price', amount);
+                    formdata.append('isAlreadyExist', details.isExistownLogo);
+                    formdata.append('logo', details.ownLogo);
+                    formdata.append('colors', Object.values(details.colors));
+                    formdata.append('choice', details.referance);
+
+                    details.referanceImages.map((item) => {
+                        formdata.append('image', item);
+                    })
+                    formdata.append('dataFOrweb', details.websiteLink);
+                    formdata.append('description', "ggfdaf");
+                    formdata.append('razorpay_payment_id', response.razorpay_payment_id);
+                    formdata.append('razorpay_order_id', response.razorpay_order_id);
+                    formdata.append('razorpay_signature', response.razorpay_signature);
+                    await axios.post('api/orders/order',
+                        formdata
+                    ).then(function (response) {
+                        console.log('====================================');
+                        console.log(response);
+                        console.log('====================================');
+                       
+                    })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             prefill: {
                 name: logindata.details.username,
                 email: logindata.details.email,
@@ -89,38 +133,39 @@ function Products() {
 
         rzp1.open();
 
-        try {
-            console.log(logindata.details.name);
-            const formdata = new FormData();
-            formdata.append('userid', logindata.details._id);
-            formdata.append('selectedPackage', packageame1);
-            formdata.append('packageType', packageType);
-            formdata.append('needs', offers);
-            formdata.append('price', amount);
-            formdata.append('isAlreadyExist', details.isExistownLogo);
-            formdata.append('logo', details.ownLogo);
-            formdata.append('colors', Object.values(details.colors));
-            formdata.append('choice', details.referance);
+        // try {
 
-            details.referanceImages.map((item) => {
-                formdata.append('image', item);
-            })
-            formdata.append('dataFOrweb', details.websiteLink);
-            formdata.append('description', "ggfdaf");
-            formdata.append('order_id', order.id);
+        //     const formdata = new FormData();
+        //     formdata.append('userid', logindata.details._id);
+        //     formdata.append('selectedpackage', packageame1);
+        //     formdata.append('packageType', packageType);
+        //     formdata.append('needs', offers);
+        //     formdata.append('price', amount);
+        //     formdata.append('isAlreadyExist', details.isExistownLogo);
+        //     formdata.append('logo', details.ownLogo);
+        //     formdata.append('colors', Object.values(details.colors));
+        //     formdata.append('choice', details.referance);
 
-            await axios.post('api/orders/order',
-                formdata
-            ).then(function (response) {
-                console.log(response);
-            })
-                .catch(function (error) {
-                    console.log(error);
-                });
+        //     details.referanceImages.map((item) => {
+        //         formdata.append('image', item);
+        //     })
+        //     formdata.append('dataFOrweb', details.websiteLink);
+        //     formdata.append('description', "ggfdaf");
+        //     formdata.append('razorpay_payment_id', paymentids.razorpay_payment_id);
+        //     formdata.append('razorpay_order_id', paymentids.razorpay_order_id);
+        //     formdata.append('razorpay_signature', paymentids.razorpay_signature);
+        //     await axios.post('api/orders/order',
+        //         formdata
+        //     ).then(function (response) {
+        //         console.log(response);
+        //     })
+        //         .catch(function (error) {
+        //             console.log(error);
+        //         });
 
-        } catch (error) {
-            console.log(error);
-        }
+        // } catch (error) {
+        //     console.log(error);
+        // }
 
     }
 
@@ -131,7 +176,7 @@ function Products() {
             axios.get('api/packages/getallpackages')
                 .then(function (response) {
                     // handle success
-                  
+
                     dispatch({
                         type: "getProducts",
                         payload: response.data
@@ -144,7 +189,7 @@ function Products() {
         }
         getAllPackage();
         console.log(logindata);
-    }, [isOrder, dispatch, logindata]);
+    }, [isOrder, dispatch, logindata, paymentids]);
     return (
         <div>
             <div className="row">
@@ -191,7 +236,7 @@ function Products() {
                         </div>
                     </div> : "Nothing to show"
                         : ""}
-                        
+
 
                 {
                     allPackage.length !== 0 ? allPackage.packagebody.length >= 2 ? <div className="col-md-4 col-sm-6">
