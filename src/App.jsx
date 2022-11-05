@@ -9,7 +9,7 @@ import MyServices from './Pages/MyServices';
 import Orders from './Pages/Orders';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
 import 'animate.css';
 import PaymentSuccess from './Pages/PaymentSuccess';

@@ -8,10 +8,16 @@ import { TbMessages } from 'react-icons/tb';
 import {VscReferences} from 'react-icons/vsc';
 import {BiLogOutCircle} from 'react-icons/bi'
 
-import { useLocation } from "react-router-dom";
+import { useLocation ,useNavigate} from "react-router-dom";
+import axios from 'axios';
 function Navbar() {
     const location = useLocation();
-   
+    const navigate = useNavigate();
+    const logout = ()=>{
+        axios.get('api/auth/logout').then((res)=>{
+            navigate('login');
+        })
+    }
     const [activDrop, setActiveDrop] = useState(false);
     const [paymentDropdown, setpaymentDropdown] = useState(false);
 
@@ -53,7 +59,7 @@ function Navbar() {
                                         <li className='p-1'><span className='icon'><FiSettings /></span><span className='ditem'>Setting</span></li>
                                         <li className='p-1'><span className='icon'><MdContactSupport /></span><span className='ditem'>Support</span></li>
                                         <li className='p-1'><span className='icon'><VscReferences /></span><span className='ditem'>Reffer & Earn</span></li>
-                                        <li className='p-1'><span className='icon'><BiLogOutCircle /></span><span className='ditem'>Logout</span></li>
+                                        <li className='p-1'><span className='icon'><BiLogOutCircle /></span><span className='ditem' onClick={logout}>Logout</span></li>
                                     </ul>
                                 </div> : ""
                             }

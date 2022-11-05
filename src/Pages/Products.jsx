@@ -80,7 +80,6 @@ function Products() {
             order_id: order.id,
             handler: async(response) => {
                 setPaymentids(response);
-               
                 try {
                     const formdata = new FormData();
                     formdata.append('userid', logindata.details._id);
@@ -104,10 +103,8 @@ function Products() {
                     await axios.post('api/orders/order',
                         formdata
                     ).then(function (response) {
-                        console.log('====================================');
                         console.log(response);
-                        console.log('====================================');
-                       
+                        navigate('/paymentsuccess');
                     })
                         .catch(function (error) {
                             console.log(error);
